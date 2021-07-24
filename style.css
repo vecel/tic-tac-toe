@@ -33,17 +33,26 @@ header {
     display: none;
 }
 
-.mode-selection {
+.card-container {
     display: flex;
     justify-content: space-around;
 }
 
-.mode {
+.card {
     width: 14vw;
     height: 14vw;
     border: 1px solid #888;
     border-radius: 10%;
     padding: 14px;
+    cursor: pointer;
+}
+
+.card:hover {
+    box-shadow: 0 0 20px 1px black;
+}
+
+.markup {
+    font-size: 3em;
 }
 
 .score {

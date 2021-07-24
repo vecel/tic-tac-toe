@@ -8,14 +8,26 @@
 
     <body>
 
-        <section>
+        <section id="game-mode-selection">
             <header>Choose game mode:</header>
-            <div class="mode-selection">
-                <div class="mode center-content">
+            <div class="card-container">
+                <div id="pvp-mode" class="card center-content">
                     VS Player
                 </div>
-                <div class="mode center-content">
+                <div id="bot-mode" class="card center-content">
                     VS Bot
+                </div>
+            </div>
+        </section>
+
+        <section id="markup-selection" class="hidden">
+            <header>Choose player's 1 markup:</header>
+            <div class="card-container">
+                <div class="card center-content markup">
+                    X
+                </div>
+                <div class="card center-content markup">
+                    O
                 </div>
             </div>
         </section>

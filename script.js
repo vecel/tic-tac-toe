@@ -24,5 +24,20 @@ const GameController = (() => {
 const pvpModeButton = document.querySelector('div#pvp-mode');
 const botModeButton = document.querySelector('div#bot-mode');
 
-pvpModeButton.addEventListener('click', GameController.setGameMode.bind(this, GameController.GameMode.PVP));
-botModeButton.addEventListener('click', GameController.setGameMode.bind(this, GameController.GameMode.BOT));
+const markupSelectionMenu = document.querySelector('section#markup-selection');
+const gameModeSelectionMenu = document.querySelector('section#game-mode-selection');
+
+pvpModeButton.addEventListener('click', () => {
+    GameController.setGameMode(GameController.GameMode.PVP);
+    switchToMarkupSelectionMenu();
+})
+
+botModeButton.addEventListener('click', () => {
+    GameController.setGameMode(GameController.GameMode.BOT);
+    switchToMarkupSelectionMenu();
+});
+
+function switchToMarkupSelectionMenu() {
+    gameModeSelectionMenu.classList.add('hidden');
+    markupSelectionMenu.classList.remove('hidden');
+}
