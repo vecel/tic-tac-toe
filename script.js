@@ -13,14 +13,15 @@ const GameController = (() => {
         else _gameMode = GameMode.UNKNOWN;
     }
 
-    function createPlayer(markup) {
+    function createPlayers(markup) {
         _players.push(PlayerFactory(markup));
+        _players.push(PlayerFactory(markup === 'X' ? 'O' : 'X'));
     }
 
     return {
         GameMode,
         setGameMode,
-        createPlayer,
+        createPlayers,
     }
 })();
 
@@ -47,7 +48,7 @@ botModeButton.addEventListener('click', () => {
 
 for (let markup of markupButtons) {
     markup.addEventListener('click', () => {
-        GameController.createPlayer(markup.textContent);
+        GameController.createPlayers(markup.textContent);
         console.log(markup.textContent);
         switchToGameDisplay();
     })
