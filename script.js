@@ -1,5 +1,6 @@
 const GameController = (() => {
     let _gameMode;
+    let _players = [];
 
     const GameMode = {
         PVP: 1,
@@ -12,20 +13,27 @@ const GameController = (() => {
         else _gameMode = GameMode.UNKNOWN;
     }
 
+    function createPlayer(markup) {
+        _players.push(PlayerFactory(markup));
+    }
+
     return {
-        _gameMode,
         GameMode,
         setGameMode,
+        createPlayer,
     }
 })();
 
-
+const PlayerFactory = (markup) => ({markup});
 
 const pvpModeButton = document.querySelector('div#pvp-mode');
 const botModeButton = document.querySelector('div#bot-mode');
 
-const markupSelectionMenu = document.querySelector('section#markup-selection');
 const gameModeSelectionMenu = document.querySelector('section#game-mode-selection');
+const markupSelectionMenu = document.querySelector('section#markup-selection');
+const gameDisplay = document.querySelector('section#game-display');
+
+const markupButtons = document.querySelectorAll('div.markup');
 
 pvpModeButton.addEventListener('click', () => {
     GameController.setGameMode(GameController.GameMode.PVP);
@@ -37,7 +45,22 @@ botModeButton.addEventListener('click', () => {
     switchToMarkupSelectionMenu();
 });
 
-function switchToMarkupSelectionMenu() {
+for (let markup of markupButtons) {
+    markup.addEventListener('click', () => {
+        GameController.createPlayer(markup.textContent);
+        console.log(markup.textContent);
+        switchToGameDisplay();
+    })
+}
+
+
+
+const switchToMarkupSelectionMenu = () => {
     gameModeSelectionMenu.classList.add('hidden');
     markupSelectionMenu.classList.remove('hidden');
+}
+
+const switchToGameDisplay = () => {
+    markupSelectionMenu.classList.add('hidden');
+    gameDisplay.classList.remove('hidden');
 }
