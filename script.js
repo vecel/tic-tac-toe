@@ -49,7 +49,9 @@ const GameController = (() => {
     }
 
     function makeMove(tileNumber) {
+        console.log(tileNumber);
         _gameBoard[tileNumber] = _turn;
+        GameBoard.drawMarkup(tileNumber, _turn);
         toggleTurn();
         // set proper markup
     }
@@ -77,7 +79,7 @@ const GameBoard = (() => {
     return {
         drawMarkup,
     }
-})
+})();
 
 const PlayerFactory = (markup) => ({markup, score: 0});
 
@@ -110,7 +112,7 @@ for (let markup of markupButtons) {
 }
 
 for (let i = 0; i < gameBoardTiles.length; ++i) {
-    gameBoardTiles[i].addEventListener('click', GameController.makeMove.bind(i))
+    gameBoardTiles[i].addEventListener('click', GameController.makeMove.bind(this, i))
 }
 
 
