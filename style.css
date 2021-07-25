@@ -78,4 +78,5 @@ header {
     background-color: #ccc;
     border-radius: 10%;
     font-size: 2em;
+    transition: .6s;
 }
