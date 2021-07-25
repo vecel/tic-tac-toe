@@ -69,6 +69,16 @@ const GameController = (() => {
     }
 })();
 
+const GameBoard = (() => {
+    function drawMarkup(position, markup) {
+        gameBoardTiles[position].textContent = markup;
+    }    
+
+    return {
+        drawMarkup,
+    }
+})
+
 const PlayerFactory = (markup) => ({markup, score: 0});
 
 const pvpModeButton = document.querySelector('div#pvp-mode');
