@@ -21,6 +21,11 @@ const GameController = (() => {
     ];
 
     
+    const _GameResult = {
+        WIN: 1,
+        DRAW: 2,
+        CONTINUE: 3
+    }
 
     const GameMode = {
         PVP: 1,
@@ -28,19 +33,21 @@ const GameController = (() => {
         UNKNOWN: 3
     } 
 
+
     function _gameIsOver() {
         for (let i = 0; i < _winningLines.length; ++i) {
             if (_gameBoard[_winningLines[i][0]] === 0) continue;
             if (_gameBoard[_winningLines[i][0]] === _gameBoard[_winningLines[i][1]] && 
                 _gameBoard[_winningLines[i][1]] === _gameBoard[_winningLines[i][2]]) {
                     GameBoard.animateWinner(_winningLines[i]);
-                    return true;
+                    return _GameResult.WIN;
                 }
         }
-        return false;
+        if (!_gameBoard.includes(0)) return _GameResult.DRAW;
+        return _GameResult.CONTINUE;
     }
 
-    function toggleTurn() {
+    function _toggleTurn() {
         _turn = 3 - _turn;
     }
 
@@ -59,10 +66,26 @@ const GameController = (() => {
         _gameBoard[tileNumber] = playerMarkup;
         console.log(_gameBoard[tileNumber]);
         GameBoard.drawMarkup(tileNumber, playerMarkup);
-        if (_gameIsOver()) {
+        if (_gameIsOver() === _GameResult.WIN) {
             console.log(`game is over, winner ${playerMarkup}`);
+            return;
         }
-        toggleTurn();
+        if (_gameIsOver() === _GameResult.DRAW) {
+            console.log(`draw`);
+            return;
+        }
+        if (_gameMode === GameMode.BOT) _makeBotMove();
+        if (_gameMode === GameMode.PVP) _toggleTurn();
+    }
+
+    function _makeBotMove() {
+        let tileNumber;
+        do {
+            tileNumber = Math.floor(Math.random() * 9);
+            console.log('iteration');
+        } while (_gameBoard[tileNumber] !== 0)
+        _gameBoard[tileNumber] = _players[1].markup;
+        GameBoard.drawMarkup(tileNumber, _players[1].markup);
     }
 
     function startGame() {
