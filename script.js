@@ -4,7 +4,7 @@ const GameController = (() => {
     let _gameBoard = [0, 0, 0,
                       0, 0, 0,
                       0, 0, 0];
-    let _turn = 'X';
+    let _turn = 1;
 
     const _winningLines = [
         [0, 1, 2],
@@ -26,16 +26,17 @@ const GameController = (() => {
     } 
 
     function _gameIsOver() {
-        for (let line in _winningLines) {
-            if (_gameBoard[line[0]] === _gameBoard[line[1]] &&
-                _gameBoard[line[1]] === _gameBoard[line[2]])
+        for (let i = 0; i < _winningLines.length; ++i) {
+            if (_gameBoard[_winningLines[i][0]] === 0) continue;
+            if (_gameBoard[_winningLines[i][0]] === _gameBoard[_winningLines[i][1]] && 
+                _gameBoard[_winningLines[i][1]] === _gameBoard[_winningLines[i][2]])
                     return true;
         }
         return false;
     }
 
     function toggleTurn() {
-        _turn = _turn === 'X' ? 'O' : 'X';
+        _turn = 3 - _turn;
     }
 
     function setGameMode(mode) {
@@ -49,17 +50,20 @@ const GameController = (() => {
     }
 
     function makeMove(tileNumber) {
-        console.log(tileNumber);
-        _gameBoard[tileNumber] = _turn;
-        GameBoard.drawMarkup(tileNumber, _turn);
+        const playerMarkup = _players[_turn - 1].markup
+        _gameBoard[tileNumber] = playerMarkup;
+        console.log(_gameBoard[tileNumber]);
+        GameBoard.drawMarkup(tileNumber, playerMarkup);
+        if (_gameIsOver()) console.log(`game is over, winner ${playerMarkup}`);
         toggleTurn();
-        // set proper markup
     }
 
     function startGame() {
-        // while (!_gameIsOver()) {
-        //     console.log('not yet');
-        // }
+        _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+
+    function getGameBoard() {
+        return _gameBoard;
     }
 
     return {
@@ -68,6 +72,10 @@ const GameController = (() => {
         createPlayers,
         makeMove,
         startGame,
+        getGameBoard,
+        _winningLines,
+        _gameBoard,
+        _gameIsOver,
     }
 })();
 
@@ -107,7 +115,6 @@ for (let markup of markupButtons) {
     markup.addEventListener('click', () => {
         GameController.createPlayers(markup.textContent);
         switchToGameDisplay();
-        GameController.startGame();
     })
 }
 
