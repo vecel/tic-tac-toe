@@ -82,7 +82,6 @@ const GameController = (() => {
         let tileNumber;
         do {
             tileNumber = Math.floor(Math.random() * 9);
-            console.log('iteration');
         } while (_gameBoard[tileNumber] !== 0)
         _gameBoard[tileNumber] = _players[1].markup;
         GameBoard.drawMarkup(tileNumber, _players[1].markup);
@@ -113,8 +112,16 @@ const GameBoard = (() => {
 
     function animateWinner(tiles) {
         console.log(tiles);
+        let timeDelay = 0;
         for (let tileNumber of tiles) {
-            gameBoardTiles[tileNumber].style.backgroundColor = 'green';
+            timeDelay += 200;
+            setTimeout(() => {
+                gameBoardTiles[tileNumber].style.backgroundColor = 'green';
+                gameBoardTiles[tileNumber].style.scale = '1.1';
+            }, timeDelay);
+            setTimeout(() => {
+                gameBoardTiles[tileNumber].style.scale = '1';
+            }, timeDelay + 350);
         }
     }
 
