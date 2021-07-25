@@ -55,6 +55,12 @@ header {
     font-size: 3em;
 }
 
+.score-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .score {
     border: 1px solid #888;
 }
