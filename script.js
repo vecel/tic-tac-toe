@@ -1,9 +1,12 @@
 const GameController = (() => {
     let _gameMode;
     let _players = [];
-    let _gameBoard = [0, 0, 0,
-                      0, 0, 0,
-                      0, 0, 0];
+    let _gameBoard = [
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0
+    ];
+
     let _turn = 1;
 
     const _winningLines = [
@@ -29,8 +32,10 @@ const GameController = (() => {
         for (let i = 0; i < _winningLines.length; ++i) {
             if (_gameBoard[_winningLines[i][0]] === 0) continue;
             if (_gameBoard[_winningLines[i][0]] === _gameBoard[_winningLines[i][1]] && 
-                _gameBoard[_winningLines[i][1]] === _gameBoard[_winningLines[i][2]])
+                _gameBoard[_winningLines[i][1]] === _gameBoard[_winningLines[i][2]]) {
+                    GameBoard.animateWinner(_winningLines[i]);
                     return true;
+                }
         }
         return false;
     }
@@ -54,7 +59,9 @@ const GameController = (() => {
         _gameBoard[tileNumber] = playerMarkup;
         console.log(_gameBoard[tileNumber]);
         GameBoard.drawMarkup(tileNumber, playerMarkup);
-        if (_gameIsOver()) console.log(`game is over, winner ${playerMarkup}`);
+        if (_gameIsOver()) {
+            console.log(`game is over, winner ${playerMarkup}`);
+        }
         toggleTurn();
     }
 
@@ -73,9 +80,6 @@ const GameController = (() => {
         makeMove,
         startGame,
         getGameBoard,
-        _winningLines,
-        _gameBoard,
-        _gameIsOver,
     }
 })();
 
@@ -84,8 +88,16 @@ const GameBoard = (() => {
         gameBoardTiles[position].textContent = markup;
     }    
 
+    function animateWinner(tiles) {
+        console.log(tiles);
+        for (let tileNumber of tiles) {
+            gameBoardTiles[tileNumber].style.backgroundColor = 'green';
+        }
+    }
+
     return {
         drawMarkup,
+        animateWinner,
     }
 })();
 
