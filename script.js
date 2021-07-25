@@ -125,9 +125,17 @@ const GameBoard = (() => {
         }
     }
 
+    function clearBoard() {
+        for (let tile of gameBoardTiles) {
+            tile.textContent = '';
+            tile.style.backgroundColor = '#ccc';
+        }
+    }
+
     return {
         drawMarkup,
         animateWinner,
+        clearBoard,
     }
 })();
 
