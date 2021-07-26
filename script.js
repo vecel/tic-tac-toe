@@ -40,7 +40,7 @@ const GameController = (() => {
             if (_gameBoard[_winningLines[i][0]] === 0) continue;
             if (_gameBoard[_winningLines[i][0]] === _gameBoard[_winningLines[i][1]] && 
                 _gameBoard[_winningLines[i][1]] === _gameBoard[_winningLines[i][2]]) {
-                    GameBoard.animateWinner(_winningLines[i]);
+                    if (!_gameEnded) GameBoard.animateWinner(_winningLines[i]);
                     return _GameResult.WIN;
             }
         }
@@ -62,8 +62,38 @@ const GameController = (() => {
         do {
             tileNumber = Math.floor(Math.random() * 9);
         } while (_gameBoard[tileNumber] !== 0)
-        _gameBoard[tileNumber] = _players[1].markup;
-        GameBoard.drawMarkup(tileNumber, _players[1].markup);        
+
+        if (_gameIsOver() === _GameResult.CONTINUE) {
+            _gameBoard[tileNumber] = _players[1].markup;
+            GameBoard.drawMarkup(tileNumber, _players[1].markup);        
+        }
+        if (_gameIsOver() === _GameResult.WIN) {
+            if (!_gameEnded) {
+                _updateScore(_players[1]);
+                _gameEnded = true;
+            }
+            return;
+        }
+        if (_gameIsOver() === _GameResult.DRAW) console.log('draw');
+    }
+
+    function _checkGameResult() {
+
+        switch (_gameIsOver()) {
+            case _GameResult.CONTINUE: 
+                break;
+            case _GameResult.WIN:
+                if (!_gameEnded) {
+                    _updateScore(_players[_turn - 1]);
+                    _gameEnded = true;
+                }
+                break;
+            case _GameResult.DRAW:
+                _gameEnded = true;
+                break;
+            default:
+                break;
+        }
     }
 
     function _updateScore(winner) {
@@ -92,6 +122,8 @@ const GameController = (() => {
     }
 
     function makeMove(tileNumber) {
+        if (_gameEnded) return;
+
         if (!_isTileEmpty(tileNumber)) {
             console.log('tile is not empty')
             return;
@@ -99,28 +131,18 @@ const GameController = (() => {
 
         const currentPlayer = _players[_turn - 1];
         
-        if (_gameIsOver() === _GameResult.CONTINUE) {
-            _gameBoard[tileNumber] = currentPlayer.markup;
-            GameBoard.drawMarkup(tileNumber, currentPlayer.markup);    
+        
+        _gameBoard[tileNumber] = currentPlayer.markup;
+        GameBoard.drawMarkup(tileNumber, currentPlayer.markup);    
+        
+        _checkGameResult();
+
+        if (!_gameEnded) {
+            if (_gameMode === GameMode.BOT) _makeBotMove();
+            if (_gameMode === GameMode.PVP) _toggleTurn();
         }
 
-        if (_gameIsOver() === _GameResult.WIN) {
-            // disable tile events
-            console.log(`game is over, winner ${currentPlayer.markup}`);
-            if (!gameEdnded) {
-                _updateScore(currentPlayer);
-                _gameEnded = true;
-            }
-            return;
-        }
-
-        if (_gameIsOver() === _GameResult.DRAW) {
-            console.log(`draw`);
-            return;
-        }
-
-        if (_gameMode === GameMode.BOT) _makeBotMove();
-        if (_gameMode === GameMode.PVP) _toggleTurn();
+        _checkGameResult();
     }
 
     
