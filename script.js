@@ -106,6 +106,10 @@ const GameController = (() => {
         playNextRoundButton.disabled = false;
     }
 
+    function _disableNextRoundButton() {
+        playNextRoundButton.disabled = true;
+    }
+
     function _updateScore(winner) {
         switch (winner) {
             case _players[0]:
@@ -126,8 +130,8 @@ const GameController = (() => {
     }
         
     function setGameMode(mode) {
-        if (mode === GameMode.PVP | mode === GameMode.BOT) _gameMode = mode;
-        else _gameMode = GameMode.UNKNOWN;
+        _gameMode = mode;
+        opponentScoreDisplay.textContent = mode === GameMode.PVP ? 'Player 2: ' : 'Bot: ';
     }
         
     function createPlayers(markup) {
@@ -162,6 +166,7 @@ const GameController = (() => {
     function playNextRound() {
         GameBoard.clearBoard();
         _resetGameBoard();
+        _disableNextRoundButton();
         _gameEnded = false;
         _toggleFirstPlayer();
         if (firstPlayer === 2) {
