@@ -27,6 +27,8 @@ const GameController = (() => {
 
     let _turn = 1;
     let _gameEnded = false;
+    let _playerScoreLabel;
+    let _opponentScoreLabel;
     
     const GameMode = {
         PVP: 1,
@@ -114,11 +116,11 @@ const GameController = (() => {
         switch (winner) {
             case _players[0]:
                 _players[0].score++;
-                playerOneScoreDisplay.textContent = `Player 1: ${_players[0].score}`;
+                playerOneScoreDisplay.textContent = `${_playerScoreLabel} ${_players[0].score}`;
                 break;
             case _players[1]:
                 _players[1].score++;
-                opponentScoreDisplay.textContent = `Player 2: ${_players[1].score}`;
+                opponentScoreDisplay.textContent = `${_opponentScoreLabel} ${_players[1].score}`;
                 break;
             default:
                break;
@@ -131,7 +133,9 @@ const GameController = (() => {
         
     function setGameMode(mode) {
         _gameMode = mode;
-        opponentScoreDisplay.textContent = mode === GameMode.PVP ? 'Player 2: ' : 'Bot: ';
+        _playerScoreLabel = mode === GameMode.PVP ? 'Player 1: ' : 'Player: ';
+        _opponentScoreLabel = mode === GameMode.PVP ? 'Player 2: ' : 'Bot: ';
+        opponentScoreDisplay.textContent = _opponentScoreLabel + '0';
     }
         
     function createPlayers(markup) {

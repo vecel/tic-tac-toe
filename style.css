@@ -74,7 +74,10 @@ button {
 }
 
 .score {
-    border: 1px solid #888;
+    border-bottom: 2px solid rgb(50, 150, 50);
+    min-width: 180px;
+    margin: 12px;
+    padding: 12px;
 }
 
 .game-board {
