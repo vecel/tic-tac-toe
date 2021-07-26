@@ -105,6 +105,12 @@ button.next-round {
     color: white;
 }
 
+button.next-round:disabled {
+    background-color: rgb(54, 82, 54);
+    color: rgb(173, 177, 173);
+    cursor: initial;
+}
+
 button.back-to-menu {
     border: 2px solid rgb(5, 100, 5);
     color: rgb(5, 100, 5);
