@@ -27,13 +27,14 @@ const GameController = (() => {
 
     let _turn = 1;
     let _gameEnded = false;
-
+    
     const GameMode = {
         PVP: 1,
         BOT: 2,
         UNKNOWN: 3
     } 
     
+    let firstPlayer = 1;
     
     function _gameIsOver() {
         for (let i = 0; i < _winningLines.length; ++i) {
@@ -55,6 +56,10 @@ const GameController = (() => {
 
     function _toggleTurn() {
         _turn = 3 - _turn;
+    }
+
+    function _toggleFirstPlayer() {
+        firstPlayer = 3 - firstPlayer;
     }
         
     function _makeBotMove() {
@@ -78,7 +83,6 @@ const GameController = (() => {
     }
 
     function _checkGameResult() {
-
         switch (_gameIsOver()) {
             case _GameResult.CONTINUE: 
                 break;
@@ -94,6 +98,12 @@ const GameController = (() => {
             default:
                 break;
         }
+
+        if (_gameEnded) _activateNextRoundButton();
+    }
+
+    function _activateNextRoundButton() {
+        playNextRoundButton.disabled = false;
     }
 
     function _updateScore(winner) {
@@ -104,11 +114,15 @@ const GameController = (() => {
                 break;
             case _players[1]:
                 _players[1].score++;
-                playerOneScoreDisplay.textContent = `Player 2: ${_players[1].score}`;
+                opponentScoreDisplay.textContent = `Player 2: ${_players[1].score}`;
                 break;
             default:
                break;
         }
+    }
+
+    function _resetGameBoard() {
+        _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
         
     function setGameMode(mode) {
@@ -145,7 +159,17 @@ const GameController = (() => {
         _checkGameResult();
     }
 
-    
+    function playNextRound() {
+        GameBoard.clearBoard();
+        _resetGameBoard();
+        _gameEnded = false;
+        _toggleFirstPlayer();
+        if (firstPlayer === 2) {
+            if (_gameMode === GameMode.BOT) _makeBotMove();
+            if (_gameMode === GameMode.PVP) _toggleTurn();
+        }
+
+    }
     // function startGame() {
     //     _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     // }
@@ -156,11 +180,13 @@ const GameController = (() => {
 
     return {
         GameMode,
+        firstPlayer,
         setGameMode,
         createPlayers,
         makeMove,
         // startGame,
         getGameBoard,
+        playNextRound,
     }
 })();
 
@@ -211,7 +237,10 @@ const markupButtons = document.querySelectorAll('div.markup');
 const gameBoardTiles = document.querySelectorAll('.game-board .tile');
 
 const playerOneScoreDisplay = document.querySelector('div.player-score');
-const opponentOneScoreDisplay = document.querySelector('div.opponent-score');
+const opponentScoreDisplay = document.querySelector('div.opponent-score');
+
+const backToMenuButton = document.querySelector('button.back-to-menu');
+const playNextRoundButton = document.querySelector('button.next-round');
 
 pvpModeButton.addEventListener('click', () => {
     GameController.setGameMode(GameController.GameMode.PVP);
@@ -234,7 +263,15 @@ for (let i = 0; i < gameBoardTiles.length; ++i) {
     gameBoardTiles[i].addEventListener('click', GameController.makeMove.bind(this, i))
 }
 
+backToMenuButton.addEventListener('click', () => {
 
+})
+
+playNextRoundButton.addEventListener('click', GameController.playNextRound.bind());
+
+
+
+// GameController.firstPlayer = 1;
 
 
 
