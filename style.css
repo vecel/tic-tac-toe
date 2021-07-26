@@ -25,7 +25,7 @@ header {
 button {
     border: none;
     font-size: 0.6em;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color: transparent;
     padding: 24px;
     margin-top: 18px;
@@ -117,4 +117,30 @@ button.next-round:disabled {
 button.back-to-menu {
     border: 2px solid rgb(5, 100, 5);
     color: rgb(5, 100, 5);
+}
+
+.notification {
+    position: absolute;
+    left: 30vw;
+    width: 40vw;
+    top: 100px;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;   
+    font-size: 3em;
+    z-index: 100;
+    /* animation: pulse;
+    animation-duration: 0.8s;
+    animation-iteration-count: 5; */
+}
+
+@keyframes pulse {
+    0% {
+        scale: 1;
+    }
+    50% {
+        scale: 1.2;
+    }
+    100% {
+        scale: 1;
+    }
 }

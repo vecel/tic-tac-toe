@@ -92,10 +92,12 @@ const GameController = (() => {
                 if (!_gameEnded) {
                     _updateScore(_players[_turn - 1]);
                     _gameEnded = true;
+                    _showResult(_GameResult.WIN, _players[_turn - 1]);
                 }
                 break;
             case _GameResult.DRAW:
                 _gameEnded = true;
+                _showResult(_GameResult.DRAW);
                 break;
             default:
                 break;
@@ -130,11 +132,24 @@ const GameController = (() => {
     function _resetGameBoard() {
         _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
-        
+
+    function _showResult(result, player) {
+        if (result === _GameResult.DRAW)
+            notificationContainer.textContent = 'DRAW';
+        if (result === _GameResult.WIN) 
+            notificationContainer.textContent = `${player.markup} WINS`;
+        notificationContainer.classList.remove('hidden');
+            setTimeout(() => {
+                notificationContainer.textContent = '';
+                notificationContainer.classList.add('hidden');
+            }, 2500);
+    }
+
     function setGameMode(mode) {
         _gameMode = mode;
         _playerScoreLabel = mode === GameMode.PVP ? 'Player 1: ' : 'Player: ';
         _opponentScoreLabel = mode === GameMode.PVP ? 'Player 2: ' : 'Bot: ';
+        playerOneScoreDisplay.textContent = _playerScoreLabel + '0';
         opponentScoreDisplay.textContent = _opponentScoreLabel + '0';
     }
         
@@ -172,7 +187,11 @@ const GameController = (() => {
         _resetGameBoard();
         _disableNextRoundButton();
         _gameEnded = false;
+        console.log(`turn: ${_turn}`);
         _toggleFirstPlayer();
+        showPlayerToMove();
+        console.log(`turn after toggling: ${_turn}`);
+
         if (firstPlayer === 2) {
             if (_gameMode === GameMode.BOT) _makeBotMove();
             if (_gameMode === GameMode.PVP) _toggleTurn();
@@ -184,11 +203,26 @@ const GameController = (() => {
         GameBoard.clearBoard();
         _resetGameBoard();
         _gameEnded = false;
+        
         _players.pop();
         _players.pop();
+        firstPlayer = 1;
         switchToMainMenu();
         _turn = 1;
     }
+
+    function showPlayerToMove() {
+        const playerLabel = _gameMode === GameMode.PVP ? 'Player 1' : 'Player';
+        const opponentLabel = _gameMode === GameMode.PVP ? 'Player 2' : 'Bot';
+        notificationContainer.classList.remove('hidden');
+        notificationContainer.textContent = `${firstPlayer === 1 ? playerLabel : opponentLabel} goes first`;
+        
+        setTimeout(() => {
+            notificationContainer.textContent = '';
+            notificationContainer.classList.add('hidden');
+        }, 2500)
+    }
+    
     // function startGame() {
     //     _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     // }
@@ -207,6 +241,7 @@ const GameController = (() => {
         getGameBoard,
         playNextRound,
         backToMenu,
+        showPlayerToMove,
     }
 })();
 
@@ -262,6 +297,8 @@ const opponentScoreDisplay = document.querySelector('div.opponent-score');
 const backToMenuButton = document.querySelector('button.back-to-menu');
 const playNextRoundButton = document.querySelector('button.next-round');
 
+const notificationContainer = document.querySelector('.notification');
+
 pvpModeButton.addEventListener('click', () => {
     GameController.setGameMode(GameController.GameMode.PVP);
     switchToMarkupSelectionMenu();
@@ -276,6 +313,7 @@ for (let markup of markupButtons) {
     markup.addEventListener('click', () => {
         GameController.createPlayers(markup.textContent);
         switchToGameDisplay();
+        GameController.showPlayerToMove();
     })
 }
 
@@ -307,5 +345,4 @@ const switchToGameDisplay = () => {
 const switchToMainMenu = () => {
     gameDisplay.classList.add('hidden');
     gameModeSelectionMenu.classList.remove('hidden');
-
 }
