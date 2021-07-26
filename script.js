@@ -179,6 +179,16 @@ const GameController = (() => {
         }
 
     }
+
+    function backToMenu() {
+        GameBoard.clearBoard();
+        _resetGameBoard();
+        _gameEnded = false;
+        _players.pop();
+        _players.pop();
+        switchToMainMenu();
+        _turn = 1;
+    }
     // function startGame() {
     //     _gameBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     // }
@@ -196,6 +206,7 @@ const GameController = (() => {
         // startGame,
         getGameBoard,
         playNextRound,
+        backToMenu,
     }
 })();
 
@@ -272,9 +283,7 @@ for (let i = 0; i < gameBoardTiles.length; ++i) {
     gameBoardTiles[i].addEventListener('click', GameController.makeMove.bind(this, i))
 }
 
-backToMenuButton.addEventListener('click', () => {
-
-})
+backToMenuButton.addEventListener('click', GameController.backToMenu.bind());
 
 playNextRoundButton.addEventListener('click', GameController.playNextRound.bind());
 
@@ -293,4 +302,10 @@ const switchToMarkupSelectionMenu = () => {
 const switchToGameDisplay = () => {
     markupSelectionMenu.classList.add('hidden');
     gameDisplay.classList.remove('hidden');
+}
+
+const switchToMainMenu = () => {
+    gameDisplay.classList.add('hidden');
+    gameModeSelectionMenu.classList.remove('hidden');
+
 }
